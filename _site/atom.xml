@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-09T17:12:51+08:00</updated><id>http://localhost:4000/</id><title type="html">Blog</title><subtitle>Robin Chan的博客</subtitle><author><name>Robin Chan</name></author><entry><title type="html">从递归说起</title><link href="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/" rel="alternate" type="text/html" title="从递归说起" /><published>2019-05-09T00:00:00+08:00</published><updated>2019-05-09T00:00:00+08:00</updated><id>http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7</id><content type="html" xml:base="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/">&lt;!-- more --&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-09T17:33:29+08:00</updated><id>http://localhost:4000/</id><title type="html">Blog</title><subtitle>Robin Chan的博客</subtitle><author><name>Robin Chan</name></author><entry><title type="html">从递归说起</title><link href="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/" rel="alternate" type="text/html" title="从递归说起" /><published>2019-05-09T00:00:00+08:00</published><updated>2019-05-09T00:00:00+08:00</updated><id>http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7</id><content type="html" xml:base="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/">&lt;!-- more --&gt;
 
 &lt;hr /&gt;
 
@@ -73,7 +73,7 @@
   &lt;p&gt;当函数被调用时，就会被加入到调用栈顶部，执行结束之后，就会从调用栈顶部移除该函数。并将程序运行权利（帧指针）交给此时栈顶的栈帧。这种后进后出的结构也就是函数的调用栈&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h4 id=&quot;eg&quot;&gt;e.g.&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;e.g.&lt;/em&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 	&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
@@ -123,7 +123,7 @@
 
 &lt;h4 id=&quot;ec-执行上下文&quot;&gt;EC: 执行上下文&lt;/h4&gt;
 
-&lt;h4 id=&quot;javascript-运行的代码环境有三种&quot;&gt;javascript 运行的代码环境有三种：&lt;/h4&gt;
+&lt;h4 id=&quot;js-的三种运行环境&quot;&gt;js 的三种运行环境&lt;/h4&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;全局代码：代码默认运行的环境，最先会进入到全局环境中&lt;/p&gt;
@@ -139,7 +139,7 @@
 
 &lt;p&gt;全局上下文是最外围的一个执行环境，web 浏览器中被认为是 window 对象。在初始化代码时会先进入全局上下文中，每当一个函数被调用时就会为该函数创建一个执行上下文，每个函数都有自己的执行上下文&lt;/p&gt;
 
-&lt;h4 id=&quot;eg-1&quot;&gt;e.g.&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;e.g.&lt;/em&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;f1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 	&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;f1Context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;f1 context&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -169,7 +169,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/images/posts/ec.jpg&quot; alt=&quot;执行上下文栈&quot; /&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;小结&quot;&gt;小结&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;小结&lt;/em&gt;&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;
@@ -186,7 +186,7 @@
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h4 id=&quot;输出过程&quot;&gt;输出？过程？&lt;/h4&gt;
+&lt;p&gt;以下代码的输出？ 过程？&lt;/p&gt;
 
 &lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -233,7 +233,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h4 id=&quot;详细过程&quot;&gt;详细过程&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;详细过程&lt;/em&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. 找到当前上下文调用函数的代码
 
@@ -267,7 +267,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h4 id=&quot;变量提升在哪一个阶段&quot;&gt;变量提升在哪一个阶段？&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;变量提升在哪一个阶段？&lt;/em&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;scope-chain作用域链&quot;&gt;scope chain(作用域链)&lt;/h4&gt;
 
@@ -367,7 +367,7 @@
 
 &lt;p&gt;this 的指向与 Reference 类型有着密切的关联（以后再讲）&lt;/p&gt;
 
-&lt;h4 id=&quot;gc-机制&quot;&gt;gc 机制？&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;gc 机制？&lt;/em&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;总结&quot;&gt;总结&lt;/h4&gt;
 
@@ -577,6 +577,8 @@ factorial(5)
 
 &lt;hr /&gt;
 
+&lt;h4 id=&quot;尾调用优化只在严格模式下开启&quot;&gt;尾调用优化只在严格模式下开启&lt;/h4&gt;
+
 &lt;p&gt;在正常模式下，函数内部有两个变量，可以跟踪函数的调用栈&lt;/p&gt;
 
 &lt;ul&gt;
@@ -617,7 +619,7 @@ factorial(5)
   &lt;li&gt;堆栈信息会在优化的过程中丢失，开发者调试非常困难&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;node610&quot;&gt;node（6.1.0）&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;node（6.1.0）&lt;/em&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;node –harmony_tailcalls test.js&lt;/p&gt;
