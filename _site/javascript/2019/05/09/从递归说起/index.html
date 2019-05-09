@@ -1,0 +1,1409 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从递归出发，对js基础知识的发散">
+<meta name="keywords" content="Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从递归说起">
+<meta property="og:url" content="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="从递归出发，对js基础知识的发散">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/assets/images/posts/recursive-google.jpg">
+<meta property="og:image" content="/assets/images/posts/stack-frame.jpg">
+<meta property="og:image" content="/assets/images/posts/e.g.1.jpg">
+<meta property="og:image" content="/assets/images/posts/ec.jpg">
+<meta property="og:image" content="/assets/images/posts/node-test-no.jpg">
+<meta property="og:image" content="/assets/images/posts/node-test-yes.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从递归说起">
+<meta name="twitter:description" content="从递归出发，对js基础知识的发散">
+<meta name="twitter:image" content="/assets/images/posts/recursive-google.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://localhost:4000/"/>
+
+
+
+
+
+  <title>从递归说起 | Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Robin Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            从递归说起
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-09T00:00:00+08:00">
+                2019-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/javascript" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    从递归出发，对js基础知识的发散
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- more -->
+
+<hr />
+
+<h2 id="什么是递归">什么是递归</h2>
+
+<hr />
+
+<h4 id="语言例子">语言例子</h4>
+
+<p>从前有座山，山里有座庙，庙里有个老和尚，正在给小和尚讲故事呢！故事是什么呢？“从前有座山，山里有座庙，庙里有个老和尚…”</p>
+
+<h4 id="google-解释">google 解释</h4>
+
+<p><img src="/assets/images/posts/recursive-google.jpg" alt="google 解释" /></p>
+
+<h4 id="简单定义">简单定义</h4>
+
+<p>函数<strong>调用</strong>自身，称为递归。</p>
+
+<h4 id="斐波那契数列">斐波那契数列</h4>
+
+<blockquote>
+  <p>斐波那契数列从第三项开始，每一项都等于前两项之和。指的是这样一个数列：0, 1, 1, 2, 3, 5, 8 …</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="k">return</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fib</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="所有的递归都可以改成循环">所有的递归都可以改成循环</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kd">let</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="kd">let</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">a</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+		<span class="nx">b</span> <span class="o">=</span> <span class="nx">c</span><span class="p">;</span>
+		<span class="nx">c</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">c</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fib</span><span class="p">(</span><span class="mi">20</span><span class="p">));</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="性能问题">性能问题？</h4>
+
+<hr />
+
+<h2 id="调用栈call-stack">调用栈（Call Stack）</h2>
+
+<hr />
+
+<h4 id="栈帧">栈帧</h4>
+
+<blockquote>
+  <p>栈帧是指为一个函数调用单独分配的那部分栈空间</p>
+</blockquote>
+
+<p>当运行的程序从当前函数调用另外一个函数时，就会为下一个函数建立一个新的栈帧，并且进入这个栈帧，这个栈帧称为当前帧。而原来的函数也有一个对应的栈帧，被称为调用帧。每一个栈帧里面都会存入当前函数的局部变量。</p>
+
+<p><img src="/assets/images/posts/stack-frame.jpg" alt="栈帧结构示意图" /></p>
+
+<h4 id="调用栈">调用栈</h4>
+
+<blockquote>
+  <p>当函数被调用时，就会被加入到调用栈顶部，执行结束之后，就会从调用栈顶部移除该函数。并将程序运行权利（帧指针）交给此时栈顶的栈帧。这种后进后出的结构也就是函数的调用栈</p>
+</blockquote>
+
+<h4 id="eg">e.g.</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">a</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">b</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">b</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">c</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">c</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">trace</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="nx">a</span><span class="p">();</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p><img src="/assets/images/posts/e.g.1.jpg" alt="看当前函数调用栈" /></p>
+
+<h4 id="js-引擎如何工作的">js 引擎如何工作的？</h4>
+
+<hr />
+
+<h2 id="js-执行过程">js 执行过程</h2>
+
+<hr />
+
+<h4 id="相关概念">相关概念：</h4>
+
+<ul>
+  <li>
+    <p>EC: 执行上下文</p>
+  </li>
+  <li>
+    <p>ECS: 执行上下文栈</p>
+  </li>
+  <li>
+    <p>VO： 变量对象</p>
+  </li>
+  <li>
+    <p>AO： 活动对象</p>
+  </li>
+  <li>
+    <p>scope chain：作用域链</p>
+  </li>
+</ul>
+
+<h4 id="ec-执行上下文">EC: 执行上下文</h4>
+
+<h4 id="javascript-运行的代码环境有三种">javascript 运行的代码环境有三种：</h4>
+
+<blockquote>
+  <p>全局代码：代码默认运行的环境，最先会进入到全局环境中</p>
+</blockquote>
+
+<blockquote>
+  <p>函数代码：在函数的局部环境中运行的代码</p>
+</blockquote>
+
+<blockquote>
+  <p>Eval 代码：在 Eval()函数中运行的代码</p>
+</blockquote>
+
+<p>全局上下文是最外围的一个执行环境，web 浏览器中被认为是 window 对象。在初始化代码时会先进入全局上下文中，每当一个函数被调用时就会为该函数创建一个执行上下文，每个函数都有自己的执行上下文</p>
+
+<h4 id="eg-1">e.g.</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">f1</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">f1Context</span> <span class="o">=</span> <span class="s2">"f1 context"</span><span class="p">;</span>
+	<span class="kd">function</span> <span class="nx">f2</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">f2Context</span> <span class="o">=</span> <span class="s2">"f2 context"</span><span class="p">;</span>
+		<span class="kd">function</span> <span class="nx">f3</span><span class="p">()</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">f3Context</span> <span class="o">=</span> <span class="s2">"f3 context"</span><span class="p">;</span>
+			<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f3Context</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="nx">f3</span><span class="p">();</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f2Context</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="nx">f2</span><span class="p">();</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f1Context</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">f1</span><span class="p">();</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>这段代码有 4 个执行上下文：全局上下文和 f1()，f2()，f3()属于自己的执行上下文。</p>
+
+<p>全局上下文拥有变量 f1()，f1()的上下文中有变量 f1Context 和 f2()，f2()的上下文有变量 f2Context 和 f3()，f3()上下文有变量 f3Context。</p>
+
+<h4 id="ecs执行上下文栈">ECS(执行上下文栈)</h4>
+
+<p>一段代码所有的执行上下文都会被推入栈中等待被执行，因为 js 是单线程（<strong>渲染进程有哪些线程？</strong>)，任务都为同步任务的情况下某一时间只能执行一个任务，执行一段代码首先会进入全局上下文中，并将其压入 ECS 中，执行 f1()会为其创建执行上下文压入栈顶，f1()中有 f2()，再为 f2()创建 f2()的执行上下文，依次，最终全局上下文被压入到栈底，f3()的执行上下文在栈顶，函数执行完后，ECS 就会弹出其上下文，f3()上下文弹出后，f2()上下文来到栈顶，开始执行 f2()，依次，最后 ECS 中只剩下全局上下文，它等到应用程序退出，例如浏览器关闭时销毁。</p>
+
+<p><img src="/assets/images/posts/ec.jpg" alt="执行上下文栈" /></p>
+
+<h4 id="小结">小结</h4>
+
+<ol>
+  <li>
+    <p>全局上下文压入栈顶</p>
+  </li>
+  <li>
+    <p>执行某一函数就为其创建一个 EC，并压入栈顶</p>
+  </li>
+  <li>
+    <p>栈顶的函数执行完之后它的 EC 就会从 ECS 中弹出，并且变量对象(VO)随之销毁</p>
+  </li>
+  <li>
+    <p>所有函数执行完之后 ECS 中只剩下全局上下文，在应用关闭时销毁</p>
+  </li>
+</ol>
+
+<h4 id="输出过程">输出？过程？</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="nx">foo</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">trace</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">foo</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="vo变量对象">VO(变量对象)</h4>
+
+<blockquote>
+  <p>创建执行上下文时与之关联的会有一个变量对象，该上下文中的所有变量和函数全都保存在这个对象中。</p>
+</blockquote>
+
+<h4 id="ao活动对象">AO(活动对象)</h4>
+
+<blockquote>
+  <p>进入到一个执行上下文时，此执行上下文中的变量和函数都可以被访问到，可以理解为被激活</p>
+</blockquote>
+
+<h4 id="ec-建立的过程">EC 建立的过程</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>建立阶段：(函数被调用，但是还未执行函数中的代码)
+	1. 创建变量，参数，函数，arguments对象
+	2. 建立scope chain(作用域链)
+	3. 确定this的值
+
+执行阶段：变量赋值，函数引用，执行代码
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>执行上下文为一个对象，包含 VO，作用域链和 this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>executionContextObj = {
+	variableObject: { /* 函数中的arguments对象, 参数, 内部的变量以及函数声明 */ },
+	scopeChain: { /* variableObject 以及所有父执行上下文中的variableObject */ },
+	this: {}
+}
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="详细过程">详细过程</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29</pre></td><td class="code"><pre class="highlight"><code>1. 找到当前上下文调用函数的代码
+
+2. 执行代码之前，先创建执行上下文
+
+3. 创建阶段：
+
+	3-1. 创建变量对象(VO)：
+
+		1. 创建arguments对象，检查当前上下文的参数，建立该对象下的属性和属性值
+
+		2. 扫描上下文的函数申明：
+
+			1. 每扫描到一个函数什么就会在VO里面用函数名创建一个属性，为一个指针，指向该函数在内存中的地址
+
+			2. 如果函数名在VO中已经存在，对应的属性值会被新的引用覆盖
+
+		3. 扫描上下文的变量申明：
+
+			1. 每扫描到一个变量就会用变量名作为属性名，其值初始化为undefined
+
+			2. 如果该变量名在VO中已经存在，则直接跳过继续扫描
+
+	3-2. 初始化作用域链
+
+	3-3. 确定上下文中this的指向
+
+4. 代码执行阶段
+
+	4-1. 执行函数体中的代码，给VO中的变量赋值
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="变量提升在哪一个阶段">变量提升在哪一个阶段？</h4>
+
+<h4 id="scope-chain作用域链">scope chain(作用域链)</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="s2">"global scope"</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">checkscope</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">scope2</span> <span class="o">=</span> <span class="s2">"local scope"</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">scope2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">checkscope</span><span class="p">();</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>执行过程如下：</p>
+
+<p>1.checkscope 函数被创建，保存作用域链到 内部属性[[scope]]</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code><span class="nx">checkscope</span><span class="p">.[[</span><span class="nx">scope</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">globalContext</span><span class="p">.</span><span class="nx">VO</span>
+<span class="p">];</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>2.执行 checkscope 函数，创建 checkscope 函数执行上下文，checkscope 函数执行上下文被压入执行上下文栈</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>ECStack = [
+	checkscopeContext,
+	globalContext
+];
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>3.checkscope 函数并不立刻执行，开始做准备工作，第一步：复制函数[[scope]]属性创建作用域链</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>checkscopeContext = {
+	Scope: checkscope.[[scope]],
+}
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>4.第二步：用 arguments 创建活动对象，随后初始化活动对象，加入形参、函数声明、变量声明</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>checkscopeContext = {
+	AO: {
+		arguments: {
+				length: 0
+		},
+		scope2: undefined
+	}，
+	Scope: checkscope.[[scope]],
+}
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>5.第三步：将活动对象压入 checkscope 作用域链顶端</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>checkscopeContext = {
+	AO: {
+			arguments: {
+					length: 0
+			},
+			scope2: undefined
+	},
+	Scope: [AO, [[Scope]]]
+}
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>6.准备工作做完，开始执行函数，随着函数的执行，修改 AO 的属性值</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>checkscopeContext = {
+	AO: {
+		arguments: {
+				length: 0
+		},
+		scope2: 'local scope'
+	},
+	Scope: [AO, [[Scope]]]
+}
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>7.查找到 scope2 的值，返回后函数执行完毕，函数上下文从执行上下文栈中弹出</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>ECStack = [
+	globalContext
+];
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="this">this</h4>
+
+<p>ECMAScript 的类型分为语言类型和规范类型。</p>
+
+<p>ECMAScript 语言类型是开发者直接使用 ECMAScript 可以操作的。其实就是我们常说的 Undefined, Null, Boolean, String, Number, 和 Object。</p>
+
+<p>而规范类型相当于 meta-values，是用来用算法描述 ECMAScript 语言结构和 ECMAScript 语言类型的。规范类型包括：Reference, List, Completion, Property Descriptor, Property Identifier, Lexical Environment, 和 Environment Record</p>
+
+<p>this 的指向与 Reference 类型有着密切的关联（以后再讲）</p>
+
+<h4 id="gc-机制">gc 机制？</h4>
+
+<h4 id="总结">总结</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>1. 调用函数时会为其创建执行上下文，并压入执行环境栈的栈顶，执行完毕弹出，执行上下文被销毁，随之VO也被销毁
+
+2. EC创建阶段分创建阶段和代码执行阶段
+
+3. 创建阶段初始变量值为undefined，执行阶段才为变量赋值
+
+4. 函数申明先于变量申明
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="了解了-js-的执行过程-再次理解调用栈">了解了 js 的执行过程， 再次理解调用栈？</h4>
+
+<hr />
+
+<h2 id="尾调用">尾调用</h2>
+
+<hr />
+
+<h4 id="什么是尾调用">什么是尾调用</h4>
+
+<blockquote>
+  <p>函数执行的最后一步是将另外一个函数调用并返回</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28</pre></td><td class="code"><pre class="highlight"><code>
+function f(x) {
+  if (x &gt; 0) {
+    return m(x)
+  }
+  return n(x);
+}
+
+
+function f(x){
+  let y = g(x);
+  return y;
+}
+
+
+function f(x){
+  return g(x) + 1;
+}
+
+
+function f(x) {
+  g(x);
+}
+
+function f(x){
+  return g(x);
+}
+
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="尾调用优化">尾调用优化</h4>
+
+<p>在调用栈的部分我们知道，当一个函数 A 调用另外一个函数 B 时，就会形成栈帧，在调用栈内同时存在调用帧 A 和当前帧 B，这是因为当函数 B 执行完成后，还需要将执行权返回 A，那么函数 A 内部的变量，调用函数 B 的位置等信息都必须保存在调用帧 A 中。不然，当函数 B 执行完继续执行函数 A 时，就乱了。</p>
+
+<p>那么现在，我们将函数 B 放到了函数 A 的最后一步调用（即尾调用），那还有必要保留函数 A 的栈帧么？当然不用，因为之后并不会再用到其调用位置、内部变量。因此直接用函数 B 的栈帧取代 A 的栈帧即可。当然，如果内层函数使用了外层函数的变量，那么就仍然需要保留函数 A 的栈帧，典型例子即是闭包。</p>
+
+<p>尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用记录，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用记录，取代外层函数的调用记录就可以了</p>
+
+<blockquote>
+  <p>只保留内层函数的调用记录。如果所有函数都是尾调用，那么完全可以做到每次执行时，调用记录只有一项，这将大大节省内存。</p>
+</blockquote>
+
+<h4 id="再次理解递归">再次理解递归？</h4>
+
+<hr />
+
+<h2 id="尾递归">尾递归</h2>
+
+<hr />
+
+<blockquote>
+  <p>函数调用自身，称为递归。如果尾调用自身，就称为尾递归。</p>
+</blockquote>
+
+<p>递归非常耗费内存，因为需要同时保存成千上百个调用记录，很容易发生”stack overflow”错误（n 个调用记录，复杂度 O(n)）。但对于尾递归来说，由于只存在一个调用记录，所以永远不会发生”stack overflow”错误（只保留一个调用记录，复杂度 O(1)）。</p>
+
+<h4 id="阶乘递归函数的改写">阶乘递归函数的改写</h4>
+
+<p>改写前</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">n</span> <span class="o">*</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>改写后</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">total</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nx">total</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span> <span class="o">*</span> <span class="nx">total</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="需要传入两个参数">需要传入两个参数？</h4>
+
+<p><em>方法一：es6 的函数默认值</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>function factorial(n, total = 1) {
+  if (n === 1) return total;
+  return factorial(n - 1, n * total);
+}
+
+factorial(5)
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="斐波那契数列的改写">斐波那契数列的改写</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fTail</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">trace</span><span class="p">();</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nx">a</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">fTail</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fTail</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p><em>方法二：在尾递归函数之外，再提供一个正常形式的函数</em></p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">tailFactorial</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">total</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nx">total</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">tailFactorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span> <span class="o">*</span> <span class="nx">total</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">tailFactorial</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="多参变单参">多参变单参？</h4>
+
+<hr />
+
+<h2 id="柯里化">柯里化</h2>
+
+<hr />
+
+<blockquote>
+  <p>把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术</p>
+</blockquote>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">currying</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">m</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">tailFactorial</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">total</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="nx">total</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">tailFactorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span> <span class="o">*</span> <span class="nx">total</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">factorial</span> <span class="o">=</span> <span class="nx">currying</span><span class="p">(</span><span class="nx">tailFactorial</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="nx">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<h4 id="多参数函数转换为接收单一参数的函数">多参数函数转换为接收单一参数的函数</h4>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fe</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">fe</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">let</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">// 参数集合</span>
+	<span class="kd">let</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+	<span class="k">return</span> <span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">args</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">args</span><span class="p">,</span> <span class="p">...</span><span class="nx">arguments</span><span class="p">];</span> <span class="c1">// 收集参数</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="nx">fe</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">fe</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nx">bar</span><span class="p">;</span>
+	<span class="p">};</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">curry</span><span class="p">(</span><span class="nx">fe</span><span class="p">)(</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">)(</span><span class="mi">3</span><span class="p">));</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p><em>纯粹的函数式编程语言没有循环操作命令，所有的循环都用递归实现</em></p>
+
+<h4 id="还有一个问题">还有一个问题？</h4>
+
+<hr />
+
+<h2 id="严格模式">严格模式</h2>
+
+<hr />
+
+<p>在正常模式下，函数内部有两个变量，可以跟踪函数的调用栈</p>
+
+<ul>
+  <li>arguments：返回调用时函数的参数。</li>
+  <li>func.caller：返回调用当前函数的那个函数</li>
+</ul>
+
+<h4 id="es6-严格模式">es6 严格模式</h4>
+
+<ol>
+  <li>变量必须声明后再使用</li>
+  <li>函数的参数不能有同名属性，否则报错</li>
+  <li>不能使用 with 语句</li>
+  <li>不能对只读属性赋值，否则报错</li>
+  <li>不能使用前缀 0 表示八进制数，否则报错</li>
+  <li>不能删除不可删除的属性，否则报错</li>
+  <li>不能删除变量 delete prop，会报错，只能删除属性 delete global[prop]</li>
+  <li>eval 不会在它的外层作用域引入变量</li>
+  <li>eval 和 arguments 不能被重新赋值</li>
+  <li>arguments 不会自动反映函数参数的变化</li>
+  <li>不能使用 arguments.callee</li>
+  <li>不能使用 arguments.caller</li>
+  <li>禁止 this 指向全局对象</li>
+  <li>不能使用 fn.caller 和 fn.arguments 获取函数调用的堆栈</li>
+  <li>增加了保留字（比如 protected、static 和 interface）</li>
+</ol>
+
+<hr />
+
+<h2 id="测试">测试</h2>
+
+<hr />
+
+<p><a href="https://github.com/v8/v8.dev/blob/master/src/blog/modern-javascript.md">chrome 未开启</a></p>
+
+<ul>
+  <li>在引擎层面消除尾递归是一个隐式的行为，程序员写代码时可能意识不到自己写了死循环的尾递归，而出现死循环后又不会报出 stack overflow 的错误，难以辨别。</li>
+  <li>堆栈信息会在优化的过程中丢失，开发者调试非常困难</li>
+</ul>
+
+<h4 id="node610">node（6.1.0）</h4>
+
+<blockquote>
+  <p>node –harmony_tailcalls test.js</p>
+</blockquote>
+
+<p>node 测试结果未开启：</p>
+
+<p><img src="/assets/images/posts/node-test-no.jpg" alt="node 测试结果未开启" /></p>
+
+<p>node 测试结果开启：</p>
+
+<p><img src="/assets/images/posts/node-test-yes.jpg" alt="node 测试结果开启" /></p>
+
+<hr />
+
+<p><em>感谢您的阅读</em></p>
+
+<hr />
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Robin Chan" />
+          <p class="site-author-name" itemprop="name">Robin Chan</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#什么是递归"> <span class="nav-number">1</span> <span class="nav-text">什么是递归</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#语言例子"> <span class="nav-number">1.1</span> <span class="nav-text">语言例子</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#google-解释"> <span class="nav-number">1.2</span> <span class="nav-text">google 解释</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#简单定义"> <span class="nav-number">1.3</span> <span class="nav-text">简单定义</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#斐波那契数列"> <span class="nav-number">1.4</span> <span class="nav-text">斐波那契数列</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#所有的递归都可以改成循环"> <span class="nav-number">1.5</span> <span class="nav-text">所有的递归都可以改成循环</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#性能问题"> <span class="nav-number">1.6</span> <span class="nav-text">性能问题？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#调用栈call-stack"> <span class="nav-number">2</span> <span class="nav-text">调用栈（Call Stack）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#栈帧"> <span class="nav-number">2.1</span> <span class="nav-text">栈帧</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#调用栈"> <span class="nav-number">2.2</span> <span class="nav-text">调用栈</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#eg"> <span class="nav-number">2.3</span> <span class="nav-text">e.g.</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#js-引擎如何工作的"> <span class="nav-number">2.4</span> <span class="nav-text">js 引擎如何工作的？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#js-执行过程"> <span class="nav-number">3</span> <span class="nav-text">js 执行过程</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#相关概念"> <span class="nav-number">3.1</span> <span class="nav-text">相关概念：</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ec-执行上下文"> <span class="nav-number">3.2</span> <span class="nav-text">EC: 执行上下文</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#javascript-运行的代码环境有三种"> <span class="nav-number">3.3</span> <span class="nav-text">javascript 运行的代码环境有三种：</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#eg-1"> <span class="nav-number">3.4</span> <span class="nav-text">e.g.</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ecs执行上下文栈"> <span class="nav-number">3.5</span> <span class="nav-text">ECS(执行上下文栈)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#小结"> <span class="nav-number">3.6</span> <span class="nav-text">小结</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#输出过程"> <span class="nav-number">3.7</span> <span class="nav-text">输出？过程？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#vo变量对象"> <span class="nav-number">3.8</span> <span class="nav-text">VO(变量对象)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ao活动对象"> <span class="nav-number">3.9</span> <span class="nav-text">AO(活动对象)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ec-建立的过程"> <span class="nav-number">3.10</span> <span class="nav-text">EC 建立的过程</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#详细过程"> <span class="nav-number">3.11</span> <span class="nav-text">详细过程</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#变量提升在哪一个阶段"> <span class="nav-number">3.12</span> <span class="nav-text">变量提升在哪一个阶段？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#scope-chain作用域链"> <span class="nav-number">3.13</span> <span class="nav-text">scope chain(作用域链)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#this"> <span class="nav-number">3.14</span> <span class="nav-text">this</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#gc-机制"> <span class="nav-number">3.15</span> <span class="nav-text">gc 机制？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#总结"> <span class="nav-number">3.16</span> <span class="nav-text">总结</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#了解了-js-的执行过程-再次理解调用栈"> <span class="nav-number">3.17</span> <span class="nav-text">了解了 js 的执行过程， 再次理解调用栈？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#尾调用"> <span class="nav-number">4</span> <span class="nav-text">尾调用</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#什么是尾调用"> <span class="nav-number">4.1</span> <span class="nav-text">什么是尾调用</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#尾调用优化"> <span class="nav-number">4.2</span> <span class="nav-text">尾调用优化</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#再次理解递归"> <span class="nav-number">4.3</span> <span class="nav-text">再次理解递归？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#尾递归"> <span class="nav-number">5</span> <span class="nav-text">尾递归</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#阶乘递归函数的改写"> <span class="nav-number">5.1</span> <span class="nav-text">阶乘递归函数的改写</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#需要传入两个参数"> <span class="nav-number">5.2</span> <span class="nav-text">需要传入两个参数？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#斐波那契数列的改写"> <span class="nav-number">5.3</span> <span class="nav-text">斐波那契数列的改写</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#多参变单参"> <span class="nav-number">5.4</span> <span class="nav-text">多参变单参？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#柯里化"> <span class="nav-number">6</span> <span class="nav-text">柯里化</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#多参数函数转换为接收单一参数的函数"> <span class="nav-number">6.1</span> <span class="nav-text">多参数函数转换为接收单一参数的函数</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#还有一个问题"> <span class="nav-number">6.2</span> <span class="nav-text">还有一个问题？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#严格模式"> <span class="nav-number">7</span> <span class="nav-text">严格模式</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#es6-严格模式"> <span class="nav-number">7.1</span> <span class="nav-text">es6 严格模式</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#测试"> <span class="nav-number">8</span> <span class="nav-text">测试</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#node610"> <span class="nav-number">8.1</span> <span class="nav-text">node（6.1.0）</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Robin Chan</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
