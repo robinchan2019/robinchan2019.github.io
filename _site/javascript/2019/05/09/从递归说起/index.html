@@ -420,7 +420,7 @@
 </code></pre></td></tr></tbody></table></div>
 </div>
 
-<h4 id="所有的递归都可以改成循环">所有的递归都可以改成循环</h4>
+<h4 id="一切能用递归写的函数都能用循环写尼克拉斯夏">一切能用递归写的函数，都能用循环写——尼克拉斯·夏</h4>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -458,7 +458,7 @@
 <h4 id="调用栈">调用栈</h4>
 
 <blockquote>
-  <p>当函数被调用时，就会被加入到调用栈顶部，执行结束之后，就会从调用栈顶部移除该函数。并将程序运行权利（帧指针）交给此时栈顶的栈帧。这种后进后出的结构也就是函数的调用栈</p>
+  <p>当函数被调用时，就会被加入到调用栈顶部，执行结束之后，就会从调用栈顶部移除该函数。并将程序运行权利（帧指针）交给此时栈顶的栈帧。这种后进先出的结构也就是函数的调用栈</p>
 </blockquote>
 
 <p><em>e.g.</em></p>
@@ -659,6 +659,43 @@
 
 <h4 id="scope-chain作用域链">scope chain(作用域链)</h4>
 
+<blockquote>
+  <p>当查找变量的时候，会先从当前上下文的变量对象中查找，如果没有找到，就会从父级(词法层面上的父级)执行上下文的变量对象中查找，一直找到全局上下文的变量对象，也就是全局对象。这样由多个执行上下文的变量对象构成的链表就叫做作用域链</p>
+</blockquote>
+
+<p>js 是基于词法作用域的，这是因为函数有一个内部属性 [[scope]]，当函数创建的时候，就会保存所有父变量对象到其中</p>
+
+<p>e.g.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>函数创建时，各自的[[scope]]为:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8</pre></td><td class="code"><pre class="highlight"><code><span class="nx">foo</span><span class="p">.[[</span><span class="nx">scope</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">globalContext</span><span class="p">.</span><span class="nx">VO</span>
+<span class="p">];</span>
+
+<span class="nx">bar</span><span class="p">.[[</span><span class="nx">scope</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nx">fooContext</span><span class="p">.</span><span class="nx">AO</span><span class="p">,</span>
+    <span class="nx">globalContext</span><span class="p">.</span><span class="nx">VO</span>
+<span class="p">];</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>当函数激活时，进入函数上下文，创建 VO/AO 后，就会将活动对象添加到作用链的前端</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code><span class="nx">Scope</span> <span class="o">=</span> <span class="p">[</span><span class="nx">AO</span><span class="p">].</span><span class="nx">concat</span><span class="p">([[</span><span class="nx">Scope</span><span class="p">]]);</span>
+</code></pre></td></tr></tbody></table></div>
+</div>
+
+<p>作用域链创建完毕</p>
+
+<p>e.g.</p>
+
 <div class="language-js highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="s2">"global scope"</span><span class="p">;</span>
 <span class="kd">function</span> <span class="nx">checkscope</span><span class="p">()</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">scope2</span> <span class="o">=</span> <span class="s2">"local scope"</span><span class="p">;</span>
@@ -751,7 +788,7 @@
 
 <p>ECMAScript 语言类型是开发者直接使用 ECMAScript 可以操作的。其实就是我们常说的 Undefined, Null, Boolean, String, Number, 和 Object。</p>
 
-<p>而规范类型相当于 meta-values，是用来用算法描述 ECMAScript 语言结构和 ECMAScript 语言类型的。规范类型包括：Reference, List, Completion, Property Descriptor, Property Identifier, Lexical Environment, 和 Environment Record</p>
+<p>而规范类型相当于 meta-values，是用来用算法描述 ECMAScript 语言结构和 ECMAScript 语言类型的。规范类型包括：Reference, List, Completion, Property Descriptor, Property Identifier, Lexical Environment, 和 Environment Record，只存在于规范里的抽象类型，它们是为了更好地描述语言的底层行为逻辑才存在的，但并不存在于实际的 js 代码中</p>
 
 <p>this 的指向与 Reference 类型有着密切的关联（以后再讲）</p>
 
@@ -783,7 +820,7 @@
   <p>函数执行的最后一步是将另外一个函数调用并返回</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28</pre></td><td class="code"><pre class="highlight"><code>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35</pre></td><td class="code"><pre class="highlight"><code>
 function f(x) {
   if (x &gt; 0) {
     return m(x)
@@ -797,6 +834,9 @@ function f(x){
   return y;
 }
 
+function f(x){
+  return g(x);
+}
 
 function f(x){
   return g(x) + 1;
@@ -807,18 +847,22 @@ function f(x) {
   g(x);
 }
 
-function f(x){
-  return g(x);
+function f() {
+	let m = 1;
+	let n = 2;
+	return g(m + n);
 }
+
+const a = () =&gt; f() || g();
 
 </code></pre></td></tr></tbody></table></div>
 </div>
 
 <h4 id="尾调用优化">尾调用优化</h4>
 
-<p>在调用栈的部分我们知道，当一个函数 A 调用另外一个函数 B 时，就会形成栈帧，在调用栈内同时存在调用帧 A 和当前帧 B，这是因为当函数 B 执行完成后，还需要将执行权返回 A，那么函数 A 内部的变量，调用函数 B 的位置等信息都必须保存在调用帧 A 中。不然，当函数 B 执行完继续执行函数 A 时，就乱了。</p>
+<p>在调用栈的部分我们知道，当一个函数 A 调用另外一个函数 B 时，就会形成栈帧，在调用栈内同时存在调用帧 A 和当前帧 B，这是因为当函数 B 执行完成后，还需要将执行权返回 A，那么函数 A 内部的变量，调用函数 B 的位置等信息都必须保存在调用帧 A 中。不然，当函数 B 执行完继续执行函数 A 时，就 xx 了。</p>
 
-<p>那么现在，我们将函数 B 放到了函数 A 的最后一步调用（即尾调用），那还有必要保留函数 A 的栈帧么？当然不用，因为之后并不会再用到其调用位置、内部变量。因此直接用函数 B 的栈帧取代 A 的栈帧即可。当然，如果内层函数使用了外层函数的变量，那么就仍然需要保留函数 A 的栈帧，典型例子即是闭包。</p>
+<p>那么现在，我们将函数 B 放到了函数 A 的最后一步调用（即尾调用），那还有必要保留函数 A 的栈帧么？当然不用，因为之后并不会再用到其调用位置、内部变量。因此直接用函数 B 的栈帧取代 A 的栈帧即可。当然，如果内层函数使用了外层函数的变量，那么就仍然需要保留函数 A 的栈帧，典型例子即是<strong>闭包</strong>。</p>
 
 <p>尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用记录，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用记录，取代外层函数的调用记录就可以了</p>
 
@@ -970,8 +1014,8 @@ factorial(5)
 <p>在正常模式下，函数内部有两个变量，可以跟踪函数的调用栈</p>
 
 <ul>
-  <li>arguments：返回调用时函数的参数。</li>
-  <li>func.caller：返回调用当前函数的那个函数</li>
+  <li>fn.arguments：表示对 fn 最近一次调用所包含的参数。</li>
+  <li>fn.caller：引用对 fn 最近一次调用的那个函数</li>
 </ul>
 
 <h4 id="es6-严格模式">es6 严格模式</h4>
@@ -1199,7 +1243,7 @@ factorial(5)
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-2"> <a class="nav-link" href="#什么是递归"> <span class="nav-number">1</span> <span class="nav-text">什么是递归</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#语言例子"> <span class="nav-number">1.1</span> <span class="nav-text">语言例子</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#google-解释"> <span class="nav-number">1.2</span> <span class="nav-text">google 解释</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#简单定义"> <span class="nav-number">1.3</span> <span class="nav-text">简单定义</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#斐波那契数列"> <span class="nav-number">1.4</span> <span class="nav-text">斐波那契数列</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#所有的递归都可以改成循环"> <span class="nav-number">1.5</span> <span class="nav-text">所有的递归都可以改成循环</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#性能问题"> <span class="nav-number">1.6</span> <span class="nav-text">性能问题？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#调用栈call-stack"> <span class="nav-number">2</span> <span class="nav-text">调用栈（Call Stack）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#栈帧"> <span class="nav-number">2.1</span> <span class="nav-text">栈帧</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#调用栈"> <span class="nav-number">2.2</span> <span class="nav-text">调用栈</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#js-引擎如何工作的"> <span class="nav-number">2.3</span> <span class="nav-text">js 引擎如何工作的？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#js-执行过程"> <span class="nav-number">3</span> <span class="nav-text">js 执行过程</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#相关概念"> <span class="nav-number">3.1</span> <span class="nav-text">相关概念：</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ec-执行上下文"> <span class="nav-number">3.2</span> <span class="nav-text">EC: 执行上下文</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#js-的三种运行环境"> <span class="nav-number">3.3</span> <span class="nav-text">js 的三种运行环境</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ecs执行上下文栈"> <span class="nav-number">3.4</span> <span class="nav-text">ECS(执行上下文栈)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#vo变量对象"> <span class="nav-number">3.5</span> <span class="nav-text">VO(变量对象)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ao活动对象"> <span class="nav-number">3.6</span> <span class="nav-text">AO(活动对象)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ec-建立的过程"> <span class="nav-number">3.7</span> <span class="nav-text">EC 建立的过程</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#scope-chain作用域链"> <span class="nav-number">3.8</span> <span class="nav-text">scope chain(作用域链)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#this"> <span class="nav-number">3.9</span> <span class="nav-text">this</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#总结"> <span class="nav-number">3.10</span> <span class="nav-text">总结</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#再次理解调用栈"> <span class="nav-number">3.11</span> <span class="nav-text">再次理解调用栈？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#尾调用"> <span class="nav-number">4</span> <span class="nav-text">尾调用</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#什么是尾调用"> <span class="nav-number">4.1</span> <span class="nav-text">什么是尾调用</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#尾调用优化"> <span class="nav-number">4.2</span> <span class="nav-text">尾调用优化</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#再次理解递归"> <span class="nav-number">4.3</span> <span class="nav-text">再次理解递归？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#尾递归"> <span class="nav-number">5</span> <span class="nav-text">尾递归</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#阶乘递归函数的改写"> <span class="nav-number">5.1</span> <span class="nav-text">阶乘递归函数的改写</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#需要传入两个参数"> <span class="nav-number">5.2</span> <span class="nav-text">需要传入两个参数？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#斐波那契数列的改写"> <span class="nav-number">5.3</span> <span class="nav-text">斐波那契数列的改写</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#多参变单参"> <span class="nav-number">5.4</span> <span class="nav-text">多参变单参？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#柯里化"> <span class="nav-number">6</span> <span class="nav-text">柯里化</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#多参数函数转换为接收单一参数的函数"> <span class="nav-number">6.1</span> <span class="nav-text">多参数函数转换为接收单一参数的函数</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#还有一个问题"> <span class="nav-number">6.2</span> <span class="nav-text">还有一个问题？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#严格模式"> <span class="nav-number">7</span> <span class="nav-text">严格模式</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#尾调用优化只在严格模式下开启"> <span class="nav-number">7.1</span> <span class="nav-text">尾调用优化只在严格模式下开启</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#es6-严格模式"> <span class="nav-number">7.2</span> <span class="nav-text">es6 严格模式</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#测试"> <span class="nav-number">8</span> <span class="nav-text">测试</span> </a> </li>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#什么是递归"> <span class="nav-number">1</span> <span class="nav-text">什么是递归</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#语言例子"> <span class="nav-number">1.1</span> <span class="nav-text">语言例子</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#google-解释"> <span class="nav-number">1.2</span> <span class="nav-text">google 解释</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#简单定义"> <span class="nav-number">1.3</span> <span class="nav-text">简单定义</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#斐波那契数列"> <span class="nav-number">1.4</span> <span class="nav-text">斐波那契数列</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#一切能用递归写的函数都能用循环写尼克拉斯夏"> <span class="nav-number">1.5</span> <span class="nav-text">一切能用递归写的函数，都能用循环写——尼克拉斯·夏</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#性能问题"> <span class="nav-number">1.6</span> <span class="nav-text">性能问题？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#调用栈call-stack"> <span class="nav-number">2</span> <span class="nav-text">调用栈（Call Stack）</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#栈帧"> <span class="nav-number">2.1</span> <span class="nav-text">栈帧</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#调用栈"> <span class="nav-number">2.2</span> <span class="nav-text">调用栈</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#js-引擎如何工作的"> <span class="nav-number">2.3</span> <span class="nav-text">js 引擎如何工作的？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#js-执行过程"> <span class="nav-number">3</span> <span class="nav-text">js 执行过程</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#相关概念"> <span class="nav-number">3.1</span> <span class="nav-text">相关概念：</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ec-执行上下文"> <span class="nav-number">3.2</span> <span class="nav-text">EC: 执行上下文</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#js-的三种运行环境"> <span class="nav-number">3.3</span> <span class="nav-text">js 的三种运行环境</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ecs执行上下文栈"> <span class="nav-number">3.4</span> <span class="nav-text">ECS(执行上下文栈)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#vo变量对象"> <span class="nav-number">3.5</span> <span class="nav-text">VO(变量对象)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ao活动对象"> <span class="nav-number">3.6</span> <span class="nav-text">AO(活动对象)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#ec-建立的过程"> <span class="nav-number">3.7</span> <span class="nav-text">EC 建立的过程</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#scope-chain作用域链"> <span class="nav-number">3.8</span> <span class="nav-text">scope chain(作用域链)</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#this"> <span class="nav-number">3.9</span> <span class="nav-text">this</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#总结"> <span class="nav-number">3.10</span> <span class="nav-text">总结</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#再次理解调用栈"> <span class="nav-number">3.11</span> <span class="nav-text">再次理解调用栈？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#尾调用"> <span class="nav-number">4</span> <span class="nav-text">尾调用</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#什么是尾调用"> <span class="nav-number">4.1</span> <span class="nav-text">什么是尾调用</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#尾调用优化"> <span class="nav-number">4.2</span> <span class="nav-text">尾调用优化</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#再次理解递归"> <span class="nav-number">4.3</span> <span class="nav-text">再次理解递归？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#尾递归"> <span class="nav-number">5</span> <span class="nav-text">尾递归</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#阶乘递归函数的改写"> <span class="nav-number">5.1</span> <span class="nav-text">阶乘递归函数的改写</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#需要传入两个参数"> <span class="nav-number">5.2</span> <span class="nav-text">需要传入两个参数？</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#斐波那契数列的改写"> <span class="nav-number">5.3</span> <span class="nav-text">斐波那契数列的改写</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#多参变单参"> <span class="nav-number">5.4</span> <span class="nav-text">多参变单参？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#柯里化"> <span class="nav-number">6</span> <span class="nav-text">柯里化</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#多参数函数转换为接收单一参数的函数"> <span class="nav-number">6.1</span> <span class="nav-text">多参数函数转换为接收单一参数的函数</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#还有一个问题"> <span class="nav-number">6.2</span> <span class="nav-text">还有一个问题？</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#严格模式"> <span class="nav-number">7</span> <span class="nav-text">严格模式</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#尾调用优化只在严格模式下开启"> <span class="nav-number">7.1</span> <span class="nav-text">尾调用优化只在严格模式下开启</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#es6-严格模式"> <span class="nav-number">7.2</span> <span class="nav-text">es6 严格模式</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#测试"> <span class="nav-number">8</span> <span class="nav-text">测试</span> </a> </li>
     </ol>
   </div>
             
