@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-10T11:39:10+08:00</updated><id>http://localhost:4000/</id><title type="html">Blog</title><subtitle>Robin Chan的博客</subtitle><author><name>Robin Chan</name></author><entry><title type="html">从递归说起</title><link href="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/" rel="alternate" type="text/html" title="从递归说起" /><published>2019-05-09T00:00:00+08:00</published><updated>2019-05-09T00:00:00+08:00</updated><id>http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7</id><content type="html" xml:base="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/">&lt;!-- more --&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-10T16:05:56+08:00</updated><id>http://localhost:4000/</id><title type="html">Blog</title><subtitle>Robin Chan的博客</subtitle><author><name>Robin Chan</name></author><entry><title type="html">从递归说起</title><link href="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/" rel="alternate" type="text/html" title="从递归说起" /><published>2019-05-09T00:00:00+08:00</published><updated>2019-05-09T00:00:00+08:00</updated><id>http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7</id><content type="html" xml:base="http://localhost:4000/javascript/2019/05/09/%E4%BB%8E%E9%80%92%E5%BD%92%E8%AF%B4%E8%B5%B7/">&lt;!-- more --&gt;
 
 &lt;hr /&gt;
 
@@ -215,8 +215,8 @@
 &lt;h4 id=&quot;ec-建立的过程&quot;&gt;EC 建立的过程&lt;/h4&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;建立阶段：(函数被调用，但是还未执行函数中的代码)
-	1. 创建变量，参数，函数，arguments对象
-	2. 建立scope chain(作用域链)
+	1. 创建变量，参数，函数，arguments对象（创建变量环境组件）
+	2. 建立scope chain(作用域链)（创建词法环境组件）
 	3. 确定this的值
 
 执行阶段：变量赋值，函数引用，执行代码
@@ -305,6 +305,19 @@
 &lt;/div&gt;
 
 &lt;p&gt;作用域链创建完毕&lt;/p&gt;
+
+&lt;h4 id=&quot;词法环境&quot;&gt;词法环境&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;一种规范类型，基于 ECMAScript 代码的词法嵌套结构来定义标识符和具体变量和函数的关联。一个词法环境由环境记录器和一个可能的引用外部词法环境的空值组成&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;词法环境的内部有两个组件：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;环境记录器：存储变量和函数声明的实际位置。
+外部环境的引用：可以访问其父级词法环境（作用域）
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;e.g.&lt;/p&gt;
 
